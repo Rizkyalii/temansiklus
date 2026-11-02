@@ -68,6 +68,7 @@
       <input type="number" name="usia">
       <input type="text" name="sekolah">
       <input type="text" name="kota">
+      <input type="tel" name="wa">
       <input type="text" name="waktu_kunjungan">
     </form>
 
@@ -1329,15 +1330,32 @@
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">
-              Kota / Kabupaten Asal (Opsional):
-            </label>
-            <input 
-              v-model="visitor.kota" 
-              type="text" 
-              placeholder="Contoh: Bandung, Surabaya, Padang, dll." 
-              class="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-amber-50/20">
+          <!-- Nomor WhatsApp & Kota Asal -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">
+                Nomor WhatsApp: <span class="text-amber-600">*</span>
+              </label>
+              <div class="relative">
+                <input 
+                  v-model="visitor.wa" 
+                  type="tel" 
+                  required 
+                  placeholder="Contoh: 081234567890" 
+                  class="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-amber-50/20">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">
+                Kota / Kabupaten:
+              </label>
+              <input 
+                v-model="visitor.kota" 
+                type="text" 
+                placeholder="Contoh: Bandung, Padang" 
+                class="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-amber-50/20">
+            </div>
           </div>
 
           <button 
@@ -1406,19 +1424,26 @@
                 <th class="p-3">Nama Lengkap</th>
                 <th class="p-3">Usia</th>
                 <th class="p-3">Asal Sekolah</th>
+                <th class="p-3">No. WhatsApp</th>
                 <th class="p-3">Kota</th>
                 <th class="p-3">Waktu Masuk</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-amber-100 bg-white">
               <tr v-if="allVisitors.length === 0">
-                <td colspan="6" class="p-6 text-center text-slate-400">Belum ada data pengunjung yang tercatat di browser ini.</td>
+                <td colspan="7" class="p-6 text-center text-slate-400">Belum ada data pengunjung yang tercatat di browser ini.</td>
               </tr>
               <tr v-for="(v, idx) in allVisitors" :key="v.id || idx" class="hover:bg-amber-50/50">
                 <td class="p-3 text-slate-400 font-mono">{{ idx + 1 }}</td>
                 <td class="p-3 font-bold text-slate-900">{{ v.nama }}</td>
                 <td class="p-3 text-slate-600">{{ v.usia }} Thn</td>
                 <td class="p-3 text-slate-700 font-medium">{{ v.sekolah }}</td>
+                <td class="p-3 font-medium">
+                  <a v-if="v.wa" :href="formatWaChatUrl(v.wa)" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200 transition" title="Chat via WhatsApp">
+                    <span>💬 {{ v.wa }}</span>
+                  </a>
+                  <span v-else class="text-slate-400">-</span>
+                </td>
                 <td class="p-3 text-slate-500">{{ v.kota || '-' }}</td>
                 <td class="p-3 text-slate-400 text-[11px]">{{ v.waktu }}</td>
               </tr>

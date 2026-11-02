@@ -22,6 +22,7 @@ createApp({
         usia: '15',
         sekolah: '',
         kota: '',
+        wa: '',
         waktu: ''
       },
       isVisitorIdentified: false,
@@ -324,6 +325,10 @@ createApp({
         alert('Mohon masukkan asal sekolah atau instansi Anda.');
         return;
       }
+      if (!this.visitor.wa || !this.visitor.wa.trim()) {
+        alert('Mohon masukkan nomor WhatsApp Anda.');
+        return;
+      }
 
       this.visitorSubmitting = true;
       const nowStr = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
@@ -344,6 +349,7 @@ createApp({
       formData.append('nama', this.visitor.nama);
       formData.append('usia', this.visitor.usia);
       formData.append('sekolah', this.visitor.sekolah);
+      formData.append('wa', this.visitor.wa);
       formData.append('kota', this.visitor.kota || '-');
       formData.append('waktu_kunjungan', nowStr);
 
@@ -382,17 +388,30 @@ createApp({
       this.showAdminVisitorModal = false;
     },
 
+    formatWaChatUrl(phone) {
+      if (!phone) return '#';
+      let clean = phone.replace(/[^0-9]/g, '');
+      if (clean.startsWith('0')) {
+        clean = '62' + clean.slice(1);
+      } else if (clean.startsWith('8')) {
+        clean = '62' + clean;
+      }
+      const nama = this.visitor.nama ? encodeURIComponent(this.visitor.nama) : 'Siswi';
+      return `https://wa.me/${clean}?text=${encodeURIComponent('Halo ' + nama + ', saya bidan/pengelola Temansiklus. Terima kasih telah mengunjungi website edukasi kesehatan menstruasi kami!')}`;
+    },
+
     exportVisitorsCSV() {
       if (!this.allVisitors || this.allVisitors.length === 0) {
         alert('Belum ada data pengunjung yang tercatat.');
         return;
       }
-      let csv = 'Nama Lengkap,Usia,Asal Sekolah / Instansi,Kota / Kabupaten,Waktu Kunjungan\n';
+      let csv = 'Nama Lengkap,Usia,Asal Sekolah / Instansi,Nomor WhatsApp,Kota / Kabupaten,Waktu Kunjungan\n';
       this.allVisitors.forEach(v => {
         const cleanName = (v.nama || '').replace(/"/g, '""');
         const cleanSchool = (v.sekolah || '').replace(/"/g, '""');
+        const cleanWa = (v.wa || '-').replace(/"/g, '""');
         const cleanCity = (v.kota || '-').replace(/"/g, '""');
-        csv += `"${cleanName}","${v.usia}","${cleanSchool}","${cleanCity}","${v.waktu}"\n`;
+        csv += `"${cleanName}","${v.usia}","${cleanSchool}","'${cleanWa}","${cleanCity}","${v.waktu}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
