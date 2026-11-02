@@ -1203,8 +1203,14 @@
             <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </div>
 
-          <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+          <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
             <span class="text-xs text-slate-500 font-medium hidden md:inline">Menampilkan {{ filteredVisitors.length }} sahabat</span>
+            <button 
+              @click="openAdminVisitors" 
+              class="px-3.5 py-2.5 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5"
+              title="Khusus Pemilik Website / Admin untuk kelola dan hapus data">
+              <span>⚙️ Kelola / Hapus Data</span>
+            </button>
             <button 
               @click="openEditVisitorModal" 
               class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
@@ -1589,11 +1595,12 @@
                 <th class="p-3">No. WhatsApp</th>
                 <th class="p-3">Kota</th>
                 <th class="p-3">Waktu Masuk</th>
+                <th class="p-3 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-amber-100 bg-white">
               <tr v-if="allVisitors.length === 0">
-                <td colspan="7" class="p-6 text-center text-slate-400">Belum ada data pengunjung yang tercatat di browser ini.</td>
+                <td colspan="8" class="p-6 text-center text-slate-400">Belum ada data pengunjung yang tercatat di browser ini.</td>
               </tr>
               <tr v-for="(v, idx) in allVisitors" :key="v.id || idx" class="hover:bg-amber-50/50">
                 <td class="p-3 text-slate-400 font-mono">{{ idx + 1 }}</td>
@@ -1608,6 +1615,14 @@
                 </td>
                 <td class="p-3 text-slate-500">{{ v.kota || '-' }}</td>
                 <td class="p-3 text-slate-400 text-[11px]">{{ v.waktu }}</td>
+                <td class="p-3 text-center">
+                  <button 
+                    @click="deleteVisitor(idx)" 
+                    class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition inline-flex items-center gap-1"
+                    title="Hapus data ini dari daftar">
+                    <span>🗑️ Hapus</span>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

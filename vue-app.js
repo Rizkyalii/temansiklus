@@ -432,6 +432,16 @@ createApp({
       }
     },
 
+    deleteVisitor(index) {
+      const target = this.allVisitors[index];
+      const nama = target && target.nama ? target.nama : 'data ini';
+      if (confirm(`Apakah Anda yakin ingin menghapus data pengunjung "${nama}"?`)) {
+        this.allVisitors.splice(index, 1);
+        localStorage.setItem('temansiklus_all_visitors', JSON.stringify(this.allVisitors));
+        this.showNotification(`Data "${nama}" berhasil dihapus.`);
+      }
+    },
+
     formatWaChatUrl(phone) {
       if (!phone) return '#';
       let clean = phone.replace(/[^0-9]/g, '');
