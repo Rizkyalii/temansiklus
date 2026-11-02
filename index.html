@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temansiklus - Platform Edukasi, Kalender &amp; Skrining Kebidanan</title>
+  <meta name="description" content="Inovasi website edukasi menstruasi, kalender pelacak siklus haid, panduan konsultasi kebidanan, dan evaluasi pemahaman remaja putri berbasis Google Form dengan tema kuning hangat.">
+  
+  <!-- Tailwind CSS via CDN with Custom Yellow/Amber Health Theme -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            },
+            sun: {
+              50: '#fefce8',
+              100: '#fef9c3',
+              200: '#fef08a',
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+              700: '#a16207',
+              800: '#854d0e',
+              900: '#713f12',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Yellow & Amber Stylesheet -->
+  <link rel="stylesheet" href="styles-yellow.css">
+
+  <!-- Vue 3 via CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body class="bg-[#fffdf7] text-slate-900 font-sans antialiased min-h-screen flex flex-col selection:bg-amber-300 selection:text-amber-950">
+
+  <div id="app" class="flex flex-col min-h-screen">
+
+    <!-- ==========================================================================
+         SITE HEADER / NAVBAR (TAILWIND STYLED)
+         ========================================================================== -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-amber-200/80 shadow-sm transition-all">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Logo & Title -->
+        <a href="#beranda" class="flex items-center gap-3 group">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center text-white shadow-md shadow-amber-500/30 group-hover:scale-105 transition-transform duration-200">
+            <!-- Sun & Heart Reproductive Health SVG Icon -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl font-extrabold text-amber-950 tracking-tight">Temansiklus</h1>
+            </div>
+            <p class="text-xs text-amber-800/80 font-medium hidden sm:block">Sahabat Cerdas Kesehatan Menstruasi Remaja Putri</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="hidden md:flex items-center gap-1">
+          <a href="#beranda" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Beranda</a>
+          <a href="#edukasi" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Edukasi Keluhan</a>
+          <a href="#kalender" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Kalender Haid</a>
+          <a href="#panduan" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Panduan &amp; Triage</a>
+          <a href="#kuis" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Kuis Evaluasi</a>
+          <a href="#inovasi" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition">Inovasi</a>
+        </nav>
+
+        <!-- CTA Action & Mobile Hamburger Button -->
+        <div class="flex items-center gap-3">
+          <a href="#kuis" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-bold text-sm shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 transition-all hover:-translate-y-0.5">
+            <svg class="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 14 2 2 4-4"></path><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
+            <span>Mulai Kuis</span>
+          </a>
+
+          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-xl text-slate-700 hover:bg-amber-100 focus:outline-none" aria-label="Toggle Navigation">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line v-if="!mobileMenuOpen" x1="3" y1="12" x2="21" y2="12"></line>
+              <line v-if="!mobileMenuOpen" x1="3" y1="6" x2="21" y2="6"></line>
+              <line v-if="!mobileMenuOpen" x1="3" y1="18" x2="21" y2="18"></line>
+              <path v-if="mobileMenuOpen" d="M18 6 6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div v-show="mobileMenuOpen" class="md:hidden border-t border-amber-200 bg-white/95 backdrop-blur-md px-4 py-4 space-y-2">
+        <a @click="mobileMenuOpen = false" href="#beranda" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Beranda</a>
+        <a @click="mobileMenuOpen = false" href="#edukasi" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Edukasi Keluhan</a>
+        <a @click="mobileMenuOpen = false" href="#kalender" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Kalender Haid</a>
+        <a @click="mobileMenuOpen = false" href="#panduan" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Panduan &amp; Triage</a>
+        <a @click="mobileMenuOpen = false" href="#kuis" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Kuis Evaluasi</a>
+        <a @click="mobileMenuOpen = false" href="#inovasi" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-800 hover:bg-amber-50">Inovasi Kebidanan</a>
+      </div>
+    </header>
+
+    <!-- ==========================================================================
+         HERO SECTION & VISUAL DIAGRAM (SESUAI WIREFRAME PNG DENGAN TEMA KUNING)
+         ========================================================================== -->
+    <section class="relative pt-12 pb-16 overflow-hidden bg-gradient-to-b from-amber-100/60 via-yellow-50/40 to-[#fffdf7]" id="beranda">
+      <!-- Glow decoration elements -->
+      <div class="absolute top-0 right-1/4 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+      <div class="absolute top-1/3 left-10 w-72 h-72 bg-yellow-200/50 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Text Banner -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            Inovasi Digital Layanan Kebidanan Remaja Putri
+          </div>
+
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-5 tracking-tight">
+            Kenali Siklusmu, Atasi Keluhan,<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500">
+              Rayakan Masa Remaja Sehat &amp; Berenergi
+            </span>
+          </h2>
+
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
+            Platform interaktif bimbingan kebidanan untuk remaja putri: belajar pencegahan kram dismenorea, memantau kalender menstruasi, skrining mandiri batas normal, dan menguji pemahaman dengan kuis terintegrasi.
+          </p>
+
+          <!-- Quick Stat Pills (Yellow & Amber Theme) -->
+          <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-2.5 px-4 py-2 bg-white rounded-2xl border border-amber-200/90 shadow-sm text-xs sm:text-sm font-semibold text-slate-800">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Siklus Normal: <strong class="text-amber-700">21 - 35 Hari</strong></span>
+            </div>
+            <div class="flex items-center gap-2.5 px-4 py-2 bg-white rounded-2xl border border-amber-200/90 shadow-sm text-xs sm:text-sm font-semibold text-slate-800">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              <span>Lama Haid: <strong class="text-amber-700">3 - 8 Hari</strong></span>
+            </div>
+            <div class="flex items-center gap-2.5 px-4 py-2 bg-white rounded-2xl border border-amber-200/90 shadow-sm text-xs sm:text-sm font-semibold text-slate-800">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>Tablet Tambah Darah: <strong class="text-amber-700">1x Seminggu</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================================================================
+             STRUKTUR KARTU DARI GAMBARAN FITUR WEBSITE (PNG WIREFRAME)
+             Halaman Utama -> Edukasi, Kalender, Kuis, Panduan
+             ==================================================================== -->
+        <div class="flow-diagram-container bg-white rounded-3xl p-6 sm:p-10 border-2 border-amber-200/80 shadow-xl shadow-amber-500/5 max-w-4xl mx-auto">
+          
+          <!-- Central Header Box from PNG -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 sm:p-6 rounded-2xl text-center max-w-lg mx-auto shadow-xl shadow-slate-900/20 border border-slate-700/60 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-white mb-1">Halaman utama website</h3>
+            <p class="text-amber-300 font-semibold text-sm sm:text-base">Temansiklus</p>
+          </div>
+
+          <!-- Flow Arrow Down from PNG -->
+          <div class="flex justify-center my-4 text-amber-500 animate-bounce-slow">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </div>
+
+          <!-- 4 Grid Feature Cards Identical to PNG Diagram -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            
+            <!-- Card 1: Edukasi -->
+            <a href="#edukasi" class="group bg-slate-900 hover:bg-slate-850 rounded-2xl p-6 text-center text-white border-2 border-slate-800 hover:border-amber-400/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="w-14 h-14 rounded-2xl bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 text-amber-400 flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 shadow-md">
+                <!-- Book icon -->
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-1 group-hover:text-amber-300 transition-colors">Edukasi</h4>
+              <p class="text-slate-400 text-sm">Membaca materi kesehatan</p>
+              <span class="mt-3 text-xs font-bold text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">Buka Edukasi &rarr;</span>
+            </a>
+
+            <!-- Card 2: Kalender -->
+            <a href="#kalender" class="group bg-slate-900 hover:bg-slate-850 rounded-2xl p-6 text-center text-white border-2 border-slate-800 hover:border-amber-400/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="w-14 h-14 rounded-2xl bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 text-amber-400 flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 shadow-md">
+                <!-- Calendar icon -->
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-1 group-hover:text-amber-300 transition-colors">Kalender</h4>
+              <p class="text-slate-400 text-sm">Mengisi tanggal haid</p>
+              <span class="mt-3 text-xs font-bold text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">Buka Kalender &rarr;</span>
+            </a>
+
+            <!-- Card 3: Kuis -->
+            <a href="#kuis" class="group bg-slate-900 hover:bg-slate-850 rounded-2xl p-6 text-center text-white border-2 border-slate-800 hover:border-amber-400/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="w-14 h-14 rounded-2xl bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 text-amber-400 flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 shadow-md">
+                <!-- Quiz clipboard icon -->
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  <path d="m9 14 2 2 4-4"></path>
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-1 group-hover:text-amber-300 transition-colors">Kuis</h4>
+              <p class="text-slate-400 text-sm">Menjawab pertanyaan</p>
+              <span class="mt-3 text-xs font-bold text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">Mulai Evaluasi &rarr;</span>
+            </a>
+
+            <!-- Card 4: Panduan -->
+            <a href="#panduan" class="group bg-slate-900 hover:bg-slate-850 rounded-2xl p-6 text-center text-white border-2 border-slate-800 hover:border-amber-400/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="w-14 h-14 rounded-2xl bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 text-amber-400 flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 shadow-md">
+                <!-- Guide pulse icon -->
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                  <path d="M12 9v4"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold mb-1 group-hover:text-amber-300 transition-colors">Panduan</h4>
+              <p class="text-slate-400 text-sm">Mengetahui kapan perlu konsultasi</p>
+              <span class="mt-3 text-xs font-bold text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">Cek Skrining &rarr;</span>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FITUR 1: EDUKASI PENCEGAHAN & MANAJEMEN KELUHAN MENSTRUASI (VUE REACTIVE)
+         ========================================================================== -->
+    <section class="py-16 bg-white border-t border-amber-200/60" id="edukasi">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">Modul Edukasi Kebidanan</span>
+          <h3 class="text-3xl font-black text-slate-900 tracking-tight">Pencegahan &amp; Manajemen Keluhan Menstruasi</h3>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">Pelajari cara mengatasi nyeri perut haid secara alami, menjaga kebersihan organ kewanitaan, dan mencukupi kebutuhan zat besi harian.</p>
+        </div>
+
+        <!-- Vue Nav Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-amber-100/70 rounded-2xl max-w-2xl mx-auto mb-10 border border-amber-200">
+          <button 
+            @click="activeTab = 'dismenorea'"
+            :class="activeTab === 'dismenorea' ? 'bg-white text-amber-900 shadow-md font-bold' : 'text-slate-700 hover:text-amber-800 font-semibold'"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+            <span>⚡ Dismenorea (Kram)</span>
+          </button>
+          <button 
+            @click="activeTab = 'hygiene'"
+            :class="activeTab === 'hygiene' ? 'bg-white text-amber-900 shadow-md font-bold' : 'text-slate-700 hover:text-amber-800 font-semibold'"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+            <span>💧 Personal Hygiene</span>
+          </button>
+          <button 
+            @click="activeTab = 'anemia'"
+            :class="activeTab === 'anemia' ? 'bg-white text-amber-900 shadow-md font-bold' : 'text-slate-700 hover:text-amber-800 font-semibold'"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+            <span>🩸 Anemia &amp; TTD</span>
+          </button>
+          <button 
+            @click="activeTab = 'pms'"
+            :class="activeTab === 'pms' ? 'bg-white text-amber-900 shadow-md font-bold' : 'text-slate-700 hover:text-amber-800 font-semibold'"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+            <span>🌤️ PMS &amp; Emosi</span>
+          </button>
+          <button 
+            @click="activeTab = 'mitos'"
+            :class="activeTab === 'mitos' ? 'bg-white text-amber-900 shadow-md font-bold' : 'text-slate-700 hover:text-amber-800 font-semibold'"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5">
+            <span>💡 Mitos vs Fakta</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Dismenorea -->
+        <div v-show="activeTab === 'dismenorea'" class="grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-300">
+          <div class="bg-amber-50/50 rounded-2xl p-6 border border-amber-200 shadow-sm flex flex-col">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-xl mb-4">🔍</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Mengapa Perut Terasa Kram?</h4>
+            <p class="text-sm text-slate-600 mb-4 flex-grow">Kram menstruasi (dismenorea primer) timbul karena pelepasan senyawa alami <strong>prostaglandin</strong> yang memicu dinding otot rahim (miometrium) berkontraksi guna meluruhkan lapisan dinding rahim.</p>
+            <div class="text-xs bg-white p-3 rounded-xl border border-amber-200 text-amber-900 font-medium">
+              Sering dirasakan pada hari ke-1 dan ke-2 saat aliran darah sedang deras.
+            </div>
+          </div>
+
+          <div class="bg-amber-50/50 rounded-2xl p-6 border border-amber-200 shadow-sm flex flex-col">
+            <div class="w-12 h-12 rounded-xl bg-yellow-500/20 text-yellow-700 flex items-center justify-center text-xl mb-4">🌿</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Terapi Alami (Non-Farmakologi)</h4>
+            <ul class="text-sm text-slate-600 space-y-2.5 mb-4 flex-grow">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Kompres Air Hangat:</strong> Tempelkan botol/bantal hangat di perut bawah selama 15-20 menit untuk melancarkan aliran darah.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Minuman Herbal Hangat:</strong> Seduhan jahe atau kunyit asam yang mengandung kurkumin (antiinflamasi alami).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Posisi Relaksasi &amp; Nafas Dalam:</strong> Child's pose atau knee-chest position membantu merilekskan otot panggul.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-amber-50/50 rounded-2xl p-6 border border-amber-200 shadow-sm flex flex-col">
+            <div class="w-12 h-12 rounded-xl bg-amber-600/20 text-amber-800 flex items-center justify-center text-xl mb-4">💊</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Kapan Butuh Obat Analgetik?</h4>
+            <p class="text-sm text-slate-600 mb-4 flex-grow">Jika rasa sakit sangat mengganggu aktivitas belajar dan tidak kunjung mereda dengan kompres hangat, konsultasikan dengan bidan/dokter untuk mendapatkan obat analgetik (asam mefenamat/ibuprofen).</p>
+            <div class="text-xs bg-amber-100 p-3 rounded-xl border border-amber-300 text-amber-900 font-semibold">
+              ⚠️ Jangan membeli atau meminum obat anti nyeri keras tanpa anjuran bidan/dokter.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Personal Hygiene -->
+        <div v-show="activeTab === 'hygiene'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-yellow-50/50 rounded-2xl p-6 border border-yellow-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-yellow-400/20 text-yellow-800 flex items-center justify-center text-xl mb-4">🚿</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Arah Cebokan yang Benar</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Selalu bersihkan organ kewanitaan dari <strong>DEPAN (vulva) ke BELAKANG (anus)</strong> dengan air bersih. Jangan bolak-balik agar bakteri usus (<em>E. coli</em>) tidak terbawa ke liang vagina yang dapat memicu Infeksi Saluran Kemih (ISK).
+            </p>
+          </div>
+
+          <div class="bg-yellow-50/50 rounded-2xl p-6 border border-yellow-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-yellow-400/20 text-yellow-800 flex items-center justify-center text-xl mb-4">⏱️</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Ganti Pembalut Tiap 3-4 Jam</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Darah menstruasi merupakan tempat ideal bagi kuman dan jamur berkembang biak. Segera ganti pembalut minimal <strong>3 sampai 4 jam sekali</strong> atau begitu terasa basah, meskipun aliran darah sedang sedikit.
+            </p>
+          </div>
+
+          <div class="bg-yellow-50/50 rounded-2xl p-6 border border-yellow-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-yellow-400/20 text-yellow-800 flex items-center justify-center text-xl mb-4">🩲</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Pakaian Dalam Katun</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Pilihlah celana dalam berbahan katun 100% yang berpori dan menyerap keringat. Hindari celana jeans yang terlalu ketat agar sirkulasi udara di area intim tetap lancar dan tidak lembap berlebih.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 3: Anemia & TTD -->
+        <div v-show="activeTab === 'anemia'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-amber-50/60 rounded-2xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-xl mb-4">🩸</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Remaja Putri &amp; Bahaya Anemia</h4>
+            <p class="text-sm text-slate-600 mb-3">Setiap menstruasi, remaja putri kehilangan 30-50 ml darah. Waspadai tanda <strong>5L: Lesu, Letih, Lemah, Lelah, Lalai</strong> yang dapat menurunkan prestasi di sekolah.</p>
+          </div>
+
+          <div class="bg-amber-50/60 rounded-2xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-xl mb-4">💊</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Aturan TTD Kemenkes RI</h4>
+            <p class="text-sm text-slate-600 mb-3">Kemenkes menganjurkan konsumsi Tablet Tambah Darah (TTD) <strong>1 tablet seminggu sekali</strong> sepanjang tahun untuk remaja putri, guna mencegah anemia dan stunting di masa depan.</p>
+          </div>
+
+          <div class="bg-amber-50/60 rounded-2xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center text-xl mb-4">🍊</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Pendamping Minum TTD</h4>
+            <p class="text-sm text-slate-600 mb-2">✅ Minum bersama <strong>air putih atau jus jeruk</strong> (kaya Vitamin C mempercepat penyerapan zat besi).</p>
+            <p class="text-sm text-amber-900 font-semibold">❌ HINDARI minum TTD bersama teh, kopi, atau susu karena tanin dan kalsium menghambat zat besi hingga 80%!</p>
+          </div>
+        </div>
+
+        <!-- Tab 4: PMS & Emosi -->
+        <div v-show="activeTab === 'pms'" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div class="bg-yellow-50 rounded-2xl p-6 border border-yellow-200 shadow-sm">
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Mengenal Premenstrual Syndrome (PMS)</h4>
+            <p class="text-sm text-slate-600 leading-relaxed mb-3">
+              Terjadi 7-10 hari sebelum darah haid keluar karena fluktuasi hormon <strong>estrogen dan progesteron</strong> yang memengaruhi zat kimia otak (serotonin).
+            </p>
+            <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside">
+              <li>Gejala fisik: Payudara nyeri tekan, perut kembung, mudah lelah, timbul jerawat.</li>
+              <li>Gejala emosional: Mood swings, mudah menangis, cemas, atau lekas tersinggung.</li>
+            </ul>
+          </div>
+
+          <div class="bg-yellow-50 rounded-2xl p-6 border border-yellow-200 shadow-sm">
+            <h4 class="text-lg font-bold text-slate-900 mb-2">Tips Manajemen Suasana Hati</h4>
+            <ul class="text-sm text-slate-600 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Kurangi Garam &amp; Kafein:</strong> Menghindari retensi cairan dan rasa kembung berlebih.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Tidur Cukup 7-8 Jam:</strong> Kurang tidur memicu hormon kortisol (stres).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">✓</span>
+                <span><strong>Olahraga Ringan:</strong> Memicu hormon endorfin yang meningkatkan mood positif.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tab 5: Mitos vs Fakta -->
+        <div v-show="activeTab === 'mitos'" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl border-2 border-amber-200 overflow-hidden shadow-sm">
+            <div class="bg-red-50 p-4 border-b border-red-200">
+              <span class="text-xs font-bold text-red-700 uppercase">Mitos Keliru ❌</span>
+              <p class="text-sm font-semibold text-red-950 mt-1">"Jangan keramas saat haid karena darah bisa naik ke kepala!"</p>
+            </div>
+            <div class="bg-emerald-50/70 p-4">
+              <span class="text-xs font-bold text-emerald-700 uppercase">Fakta Kebidanan ✔️</span>
+              <p class="text-xs sm:text-sm text-emerald-950 mt-1">Keramas dan mandi bersih saat haid sangat penting agar terhindar dari kuman dan bau badan. Tidak ada hubungannya dengan darah haid.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border-2 border-amber-200 overflow-hidden shadow-sm">
+            <div class="bg-red-50 p-4 border-b border-red-200">
+              <span class="text-xs font-bold text-red-700 uppercase">Mitos Keliru ❌</span>
+              <p class="text-sm font-semibold text-red-950 mt-1">"Minum air es bikin darah menstruasi membeku di rahim!"</p>
+            </div>
+            <div class="bg-emerald-50/70 p-4">
+              <span class="text-xs font-bold text-emerald-700 uppercase">Fakta Kebidanan ✔️</span>
+              <p class="text-xs sm:text-sm text-emerald-950 mt-1">Minuman masuk ke lambung, sedangkan darah haid ada di rahim. Suhu air es sama sekali tidak memengaruhi atau membekukan rahim.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border-2 border-amber-200 overflow-hidden shadow-sm">
+            <div class="bg-red-50 p-4 border-b border-red-200">
+              <span class="text-xs font-bold text-red-700 uppercase">Mitos Keliru ❌</span>
+              <p class="text-sm font-semibold text-red-950 mt-1">"Darah haid adalah darah kotor beracun."</p>
+            </div>
+            <div class="bg-emerald-50/70 p-4">
+              <span class="text-xs font-bold text-emerald-700 uppercase">Fakta Kebidanan ✔️</span>
+              <p class="text-xs sm:text-sm text-emerald-950 mt-1">Darah haid adalah luruhnya dinding endometrium bersama sel telur yang tidak dibuahi. Darah ini steril secara fisiologis dan bukan racun tubuh.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border-2 border-amber-200 overflow-hidden shadow-sm">
+            <div class="bg-red-50 p-4 border-b border-red-200">
+              <span class="text-xs font-bold text-red-700 uppercase">Mitos Keliru ❌</span>
+              <p class="text-sm font-semibold text-red-950 mt-1">"Saat haid tidak boleh berolahraga sama sekali."</p>
+            </div>
+            <div class="bg-emerald-50/70 p-4">
+              <span class="text-xs font-bold text-emerald-700 uppercase">Fakta Kebidanan ✔️</span>
+              <p class="text-xs sm:text-sm text-emerald-950 mt-1">Olahraga ringan (jalan santai, stretching) justru merangsang pelepasan hormon endorfin alami yang membantu meredakan kram perut.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FITUR 2: KALENDER MENSTRUASI INTERAKTIF & TRACKER (VUE REACTIVITY)
+         ========================================================================== -->
+    <section class="py-16 bg-[#fffdf7] border-t border-amber-200/60" id="kalender">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold uppercase tracking-wider mb-2">Smart Period Tracker</span>
+          <h3 class="text-3xl font-black text-slate-900 tracking-tight">Kalender Pintar &amp; Pengingat Menstruasi</h3>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">Catat tanggal haid terakhirmu (HPHT) untuk memperkirakan jadwal datang bulan berikutnya dan simpan catatan harian gejala tubuhmu.</p>
+        </div>
+
+        <!-- 4 Summary Predictions Cards in Warm Yellow Theme -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div>
+              <p class="text-xs uppercase font-bold text-slate-400">Prediksi Haid Berikutnya</p>
+              <h5 class="text-base font-extrabold text-slate-900">{{ nextPeriodFormatted }}</h5>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-yellow-500/20 text-yellow-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+              <p class="text-xs uppercase font-bold text-slate-400">Hitung Mundur</p>
+              <h5 class="text-base font-extrabold text-amber-700">{{ countdownDays }}</h5>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-600/20 text-amber-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4v3a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"></path><path d="M16 11v1a4 4 0 0 1-8 0v-1"></path><path d="M12 16v6"></path><path d="M8 22h8"></path></svg>
+            </div>
+            <div>
+              <p class="text-xs uppercase font-bold text-slate-400">Fase Siklus Hari Ini</p>
+              <h5 class="text-sm sm:text-base font-extrabold text-slate-900">{{ currentPhaseText }}</h5>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-600 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div>
+              <p class="text-xs uppercase font-bold text-slate-400">Perkiraan Masa Subur</p>
+              <h5 class="text-base font-extrabold text-slate-900">{{ fertileWindowText }}</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Layout: Sidebar Inputs + Interactive Calendar Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Sidebar Form Input -->
+          <div class="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-amber-200 shadow-md">
+            <h4 class="text-lg font-bold text-amber-950 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              Input Data Siklus Menstruasi
+            </h4>
+
+            <form @submit.prevent="handleCycleSubmit" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5" for="inputHpht">Hari Pertama Haid Terakhir (HPHT):</label>
+                <input 
+                  id="inputHpht" 
+                  v-model="cycleForm.lastPeriodDate" 
+                  type="date" 
+                  required 
+                  class="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-amber-50/30">
+                <p class="text-[11px] text-slate-500 mt-1">Tanggal saat pertama kali darah haid keluar di siklus terakhir.</p>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs font-bold text-slate-700 uppercase tracking-wide">Lama Darah Haid (Hari):</label>
+                  <span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">{{ cycleForm.periodDuration }} Hari</span>
+                </div>
+                <input 
+                  v-model="cycleForm.periodDuration" 
+                  type="range" min="3" max="10" step="1" 
+                  class="w-full">
+                <p class="text-[11px] text-slate-500 mt-0.5">Durasi pendarahan umum: 3 sampai 8 hari.</p>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs font-bold text-slate-700 uppercase tracking-wide">Panjang Siklus (Hari):</label>
+                  <span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">{{ cycleForm.cycleLength }} Hari</span>
+                </div>
+                <input 
+                  v-model="cycleForm.cycleLength" 
+                  type="range" min="21" max="45" step="1" 
+                  class="w-full">
+                <p class="text-[11px] text-slate-500 mt-0.5">Jarak antar hari pertama haid (Rentang normal: 21 - 35 hari).</p>
+              </div>
+
+              <button 
+                type="submit" 
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-bold text-sm shadow-md shadow-amber-500/20 transition-all hover:scale-[1.01]">
+                Simpan &amp; Perbarui Kalender
+              </button>
+
+              <div class="flex gap-2 pt-1">
+                <button 
+                  type="button" 
+                  @click="resetCycleSettings" 
+                  class="flex-1 py-2 rounded-xl border border-amber-200 text-xs font-semibold text-slate-700 hover:bg-amber-50 transition">
+                  Reset Data
+                </button>
+                <button 
+                  type="button" 
+                  @click="printReport" 
+                  class="flex-1 py-2 rounded-xl border border-amber-200 text-xs font-semibold text-slate-700 hover:bg-amber-50 transition flex items-center justify-center gap-1">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Cetak Laporan
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Interactive Calendar Grid View -->
+          <div class="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-7 border border-amber-200 shadow-md">
+            
+            <!-- Calendar Header with Month Navigation -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-amber-100">
+              <h4 class="text-xl font-extrabold text-slate-900 tracking-tight">{{ calMonthYearTitle }}</h4>
+              <div class="flex gap-2">
+                <button @click="prevMonth" class="w-9 h-9 rounded-xl border border-amber-200 hover:bg-amber-100/60 flex items-center justify-center text-slate-700 transition" aria-label="Bulan Lalu">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button @click="nextMonth" class="w-9 h-9 rounded-xl border border-amber-200 hover:bg-amber-100/60 flex items-center justify-center text-slate-700 transition" aria-label="Bulan Depan">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Weekday Headers -->
+            <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">
+              <span class="text-amber-700">Min</span>
+              <span>Sen</span>
+              <span>Sel</span>
+              <span>Rab</span>
+              <span>Kam</span>
+              <span>Jum</span>
+              <span class="text-amber-700">Sab</span>
+            </div>
+
+            <!-- Calendar Days (Rendered with Vue v-for) -->
+            <div class="grid grid-cols-7 gap-1.5 sm:gap-2">
+              <template v-for="cell in calendarGrid" :key="cell.id">
+                <div v-if="cell.isEmpty" class="aspect-square opacity-0"></div>
+                <div 
+                  v-else 
+                  @click="selectCalendarDay(cell.dateStr)"
+                  :class="[
+                    cell.status,
+                    cell.isToday ? 'ring-2 ring-slate-900 font-extrabold' : '',
+                    cell.hasLog ? 'cal-day-has-log' : '',
+                    selectedLogDate === cell.dateStr ? 'outline outline-2 outline-amber-500 scale-105 z-10' : ''
+                  ]"
+                  class="aspect-square rounded-2xl flex flex-col items-center justify-center text-sm font-semibold cursor-pointer relative transition-all duration-150 hover:scale-105 border border-slate-100 hover:border-amber-400 bg-slate-50/50">
+                  <span>{{ cell.day }}</span>
+                </div>
+              </template>
+            </div>
+
+            <!-- Calendar Color Legends (Kuning & Amber Theme) -->
+            <div class="flex flex-wrap items-center gap-4 mt-6 pt-5 border-t border-amber-100 text-xs text-slate-600 font-medium">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded bg-gradient-to-tr from-amber-600 to-amber-500 shadow-sm"></span>
+                <span>Haid Dicatat</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded bg-amber-100 border border-dashed border-amber-500"></span>
+                <span>Prediksi Haid Bulan Depan</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded bg-emerald-100 text-emerald-800"></span>
+                <span>Perkiraan Masa Subur</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded bg-gradient-to-tr from-emerald-600 to-emerald-500 text-white"></span>
+                <span>Hari Ovulasi</span>
+              </div>
+            </div>
+
+            <!-- Daily Symptom & Mood Logger Card for Selected Date -->
+            <div class="mt-6 bg-amber-50/60 rounded-2xl p-5 border border-amber-200">
+              <div class="flex items-center justify-between mb-4">
+                <h5 class="text-sm font-bold text-slate-900">
+                  Catatan Harian: <span class="text-amber-800 font-extrabold">{{ selectedLogDateFormatted }}</span>
+                </h5>
+                <button 
+                  v-if="dailyLogs[selectedLogDate]" 
+                  @click="deleteDailyLog" 
+                  class="text-xs px-2.5 py-1 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 font-semibold transition">
+                  Hapus
+                </button>
+              </div>
+
+              <!-- Volume Darah -->
+              <div class="mb-3">
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Volume Aliran Darah:</label>
+                <div class="flex flex-wrap gap-2">
+                  <button 
+                    type="button" 
+                    @click="selectedLog.flow = 'spotting'" 
+                    :class="selectedLog.flow === 'spotting' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Flek / Sedikit
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.flow = 'medium'" 
+                    :class="selectedLog.flow === 'medium' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Sedang
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.flow = 'heavy'" 
+                    :class="selectedLog.flow === 'heavy' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Banyak / Deras
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.flow = 'none'" 
+                    :class="selectedLog.flow === 'none' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Tidak Ada
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tingkat Nyeri Kram -->
+              <div class="mb-3">
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Intensitas Nyeri Kram (Dismenorea):</label>
+                <div class="flex flex-wrap gap-2">
+                  <button 
+                    type="button" 
+                    @click="selectedLog.cramp = 'none'" 
+                    :class="selectedLog.cramp === 'none' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Bebas Nyeri (0)
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.cramp = 'mild'" 
+                    :class="selectedLog.cramp === 'mild' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Ringan (1-3)
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.cramp = 'moderate'" 
+                    :class="selectedLog.cramp === 'moderate' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Sedang (4-6)
+                  </button>
+                  <button 
+                    type="button" 
+                    @click="selectedLog.cramp = 'severe'" 
+                    :class="selectedLog.cramp === 'severe' ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'" 
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    Berat (7-10)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mood & Gejala Tambahan -->
+              <div class="mb-3">
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Suasana Hati (Mood) &amp; Fisik:</label>
+                <div class="flex flex-wrap gap-2">
+                  <button 
+                    v-for="m in [
+                      { val: 'happy', label: '😊 Ceria' },
+                      { val: 'sensitive', label: '🥺 Sensitif' },
+                      { val: 'tired', label: '🥱 Lelah' },
+                      { val: 'bloated', label: '🎈 Kembung' },
+                      { val: 'headache', label: '🤕 Pusing' },
+                      { val: 'acne', label: '✨ Jerawat' }
+                    ]"
+                    :key="m.val"
+                    type="button"
+                    @click="toggleMood(m.val)"
+                    :class="selectedLog.moods.includes(m.val) ? 'bg-amber-500 text-slate-950 font-bold border-amber-500' : 'bg-white text-slate-700 border-amber-200'"
+                    class="px-3 py-1 rounded-full text-xs border transition">
+                    {{ m.label }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Catatan Tambahan -->
+              <div class="flex gap-2">
+                <input 
+                  v-model="selectedLog.notes" 
+                  type="text" 
+                  placeholder="Catatan (contoh: sudah minum TTD, kompres hangat)..." 
+                  class="flex-1 px-3 py-2 rounded-xl text-xs bg-white border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <button 
+                  type="button" 
+                  @click="saveDailyLog" 
+                  class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm transition">
+                  Simpan Catatan
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FITUR 3: PANDUAN & SKRINING MANDIRI SIKLUS (TRIAGE KEBIDANAN)
+         ========================================================================== -->
+    <section class="py-16 bg-white border-t border-amber-200/60" id="panduan">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-900 text-xs font-bold uppercase tracking-wider mb-2">Panduan Medis &amp; Triage</span>
+          <h3 class="text-3xl font-black text-slate-900 tracking-tight">Kapan Siklus Perlu Dikonsultasikan ke Bidan?</h3>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">Pahami standar fisiologis kebidanan dan lakukan skrining mandiri untuk mengidentifikasi apakah siklusmu memerlukan pemeriksaan lebih lanjut.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          
+          <!-- Standar Fisiologis Kebidanan (FIGO & IBI) -->
+          <div class="bg-amber-50/50 rounded-3xl p-6 sm:p-8 border border-amber-200 shadow-sm">
+            <h4 class="text-xl font-bold text-amber-950 mb-5 flex items-center gap-2">
+              <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4v3a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"></path><path d="M16 11v1a4 4 0 0 1-8 0v-1"></path><path d="M12 16v6"></path><path d="M8 22h8"></path></svg>
+              Standar Fisiologis Normal (FIGO &amp; IBI)
+            </h4>
+
+            <div class="space-y-4">
+              <div class="bg-white p-4 rounded-2xl border border-amber-200/80">
+                <h5 class="text-sm font-bold text-slate-900">1. Panjang Siklus: 21 s/d 35 Hari</h5>
+                <p class="text-xs text-slate-600 mt-1">Dihitung dari hari pertama haid bulan ini sampai hari pertama haid berikutnya. Rentang 21-35 hari adalah batas fisiologis sehat bagi perempuan.</p>
+              </div>
+
+              <div class="bg-white p-4 rounded-2xl border border-amber-200/80">
+                <h5 class="text-sm font-bold text-slate-900">2. Lama Darah Haid: 3 s/d 8 Hari</h5>
+                <p class="text-xs text-slate-600 mt-1">Hari ke-1 sampai ke-3 biasanya paling deras, lalu berangsur berkurang hingga bersih pada hari ke-7 atau ke-8.</p>
+              </div>
+
+              <div class="bg-white p-4 rounded-2xl border border-amber-200/80">
+                <h5 class="text-sm font-bold text-slate-900">3. Jumlah Pembalut: 3 s/d 5 Kali Sehari</h5>
+                <p class="text-xs text-slate-600 mt-1">Total darah haid normal berkisar 30-80 ml. Jika pembalut penuh basah kuyup setiap 1 jam, waspadai risiko menorrhagia.</p>
+              </div>
+
+              <div class="bg-white p-4 rounded-2xl border border-amber-200/80">
+                <h5 class="text-sm font-bold text-slate-900">4. Adaptasi Menarche Remaja Putri</h5>
+                <p class="text-xs text-slate-600 mt-1">Pada 1-2 tahun pertama setelah menstruasi pertama, poros hormon *Hipotalamus-Pituitari-Ovarium (HPO)* belum matang sepenuhnya, sehingga siklus belum teratur merupakan hal normal.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Self-Triage Screening Form -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-md">
+            <h4 class="text-xl font-bold text-amber-950 mb-1">Skrining Mandiri Siklus Menstruasi</h4>
+            <p class="text-xs text-slate-500 mb-6">Jawab 5 pertanyaan cepat ini untuk mendapatkan analisis triage kebidanan.</p>
+
+            <form @submit.prevent="handleTriageSubmit" class="space-y-4">
+              <!-- Q1 -->
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-2">1. Berapa rata-rata panjang siklus haidmu?</label>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.cycle" value="normal" required class="accent-amber-600">
+                    <span>21 sampai 35 hari (Teratur setiap bulan)</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.cycle" value="irregular" class="accent-amber-600">
+                    <span>Kadang terlalu cepat (&lt;21 hari) atau mundur hingga 40 hari</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.cycle" value="amenorrhea" class="accent-amber-600">
+                    <span>Sudah lebih dari 3 bulan (90 hari) tidak haid sama sekali</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q2 -->
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-2">2. Berapa hari lama darah haidmu keluar?</label>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.duration" value="normal" required class="accent-amber-600">
+                    <span>3 sampai 8 hari</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.duration" value="short" class="accent-amber-600">
+                    <span>Sangat singkat (&lt; 2 hari atau flek tipis saja)</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.duration" value="long" class="accent-amber-600">
+                    <span>Sangat lama (&gt; 8-10 hari terus menerus)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q3 -->
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-2">3. Frekuensi ganti pembalut di hari terderas:</label>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.pads" value="normal" required class="accent-amber-600">
+                    <span>3 sampai 5 kali sehari (wajar &amp; bersih)</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.pads" value="very_heavy" class="accent-amber-600">
+                    <span>Pembalut tembus basah kuyup setiap 1 jam</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q4 -->
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-2">4. Tingkat nyeri kram perut yang dialami:</label>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.pain" value="mild" required class="accent-amber-600">
+                    <span>Ringan atau sedang (mereda dengan kompres hangat/istirahat)</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.pain" value="severe" class="accent-amber-600">
+                    <span>Sangat menyiksa, membuat pingsan/muntah/tidak bisa sekolah</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q5 -->
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-2">5. Gumpalan darah besar atau perdarahan di luar siklus:</label>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.redFlags" value="no" required class="accent-amber-600">
+                    <span>Tidak ada / hanya gumpalan kecil wajar</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-100/50 cursor-pointer">
+                    <input type="radio" v-model="triage.redFlags" value="yes" class="accent-amber-600">
+                    <span>Ya, sering keluar gumpalan besar (&gt; koin 500) atau berdarah di tengah siklus</span>
+                  </label>
+                </div>
+              </div>
+
+              <button 
+                type="submit" 
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-extrabold text-sm shadow-md shadow-amber-500/20 transition-all hover:scale-[1.01]">
+                Analisis Siklus Menstruasiku Sekarang
+              </button>
+            </form>
+
+            <!-- Triage Result Card Rendered Reactively -->
+            <div v-if="triageResult" :class="triageResult.bgClass" class="mt-6 p-5 rounded-2xl border transition-all">
+              <h5 :class="triageResult.titleColor" class="font-extrabold text-sm mb-2">{{ triageResult.badge }}</h5>
+              <p class="text-xs leading-relaxed mb-3">{{ triageResult.message }}</p>
+              <div class="text-xs font-bold mb-1.5">Rekomendasi Langkah Bidan:</div>
+              <ul class="text-xs space-y-1">
+                <li v-for="(item, idx) in triageResult.checklist" :key="idx" class="flex items-start gap-1.5">
+                  <span class="font-bold">•</span>
+                  <span>{{ item }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Red Flags Warning Banner -->
+        <div class="mt-10 bg-amber-100/70 border-2 border-amber-300 rounded-3xl p-6 sm:p-8">
+          <div class="flex items-center gap-2 text-amber-950 font-extrabold text-base mb-2">
+            <svg class="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            Tanda Bahaya Menstruasi: Segera Periksakan Diri ke Faskes
+          </div>
+          <p class="text-xs sm:text-sm text-amber-900 mb-4">Jika kamu mengalami salah satu tanda berikut, segera ajak orang tua atau guru UKS untuk berkonsultasi ke Bidan di Puskesmas atau Dokter Spesialis Kebidanan (Sp.OG):</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-semibold text-amber-950">
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-sm flex items-center gap-2">
+              <span class="text-amber-600 font-bold">⚠️</span>
+              <span>Darah tembus ganti pembalut tiap 1 jam</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-sm flex items-center gap-2">
+              <span class="text-amber-600 font-bold">⚠️</span>
+              <span>Nyeri kram ekstrem hingga pingsan/demam</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-sm flex items-center gap-2">
+              <span class="text-amber-600 font-bold">⚠️</span>
+              <span>Belum haid sama sekali hingga usia 15 tahun</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-sm flex items-center gap-2">
+              <span class="text-amber-600 font-bold">⚠️</span>
+              <span>Haid berhenti lebih dari 90 hari berturut-turut</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FITUR 4: KUIS EVALUASI PENGETAHUAN & GOOGLE FORM
+         ========================================================================== -->
+    <section class="py-16 bg-[#fffdf7] border-t border-amber-200/60" id="kuis">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-200 text-amber-900 text-xs font-bold uppercase tracking-wider mb-2">Evaluasi Pengetahuan</span>
+          <h3 class="text-3xl font-black text-slate-900 tracking-tight">Kuis Pengetahuan Remaja Putri &amp; Google Form</h3>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">Uji pemahamanmu mengenai kesehatan menstruasi melalui simulasi kuis interaktif atau isi formulir evaluasi resmi Google Form.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          
+          <!-- 1. Google Form Integration Card -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-amber-200 shadow-md flex flex-col">
+            <div class="flex items-start gap-4 mb-5">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-700 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <div>
+                <h4 class="text-lg font-bold text-slate-900">Evaluasi Kuis Google Form</h4>
+                <p class="text-xs text-slate-500">Media evaluasi resmi untuk pre-test dan post-test pemahaman materi edukasi kebidanan.</p>
+              </div>
+            </div>
+
+            <!-- Embed iframe Container -->
+            <div class="w-full h-[460px] rounded-2xl border border-amber-200 overflow-hidden bg-amber-50/20 relative mb-4">
+              <iframe :src="gformUrl" class="w-full h-full border-none" title="Google Form Kuis Menstruasi">
+                Memuat formulir Google Form...
+              </iframe>
+            </div>
+
+            <div class="flex flex-wrap gap-2.5">
+              <a :href="gformUrl.replace('embedded=true', '')" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                Buka di Tab Baru
+              </a>
+              <button @click="openGformModal" class="px-4 py-2.5 rounded-xl border border-amber-300 hover:bg-amber-50 text-amber-900 font-bold text-xs transition flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Atur Tautan Google Form Saya
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Built-in Interactive Web Quiz in Vue 3 -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-md">
+            
+            <div v-if="!quizFinished">
+              <div class="mb-4">
+                <span class="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-yellow-100 text-yellow-900">Kuis Interaktif Langsung</span>
+                <h4 class="text-lg font-bold text-slate-900 mt-2">Simulasi Kuis Kebidanan</h4>
+                
+                <!-- Progress Bar -->
+                <div class="w-full h-2 bg-amber-100 rounded-full mt-3 overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-300" :style="{ width: quizProgressBarWidth }"></div>
+                </div>
+                <div class="flex justify-between text-[11px] font-bold text-slate-400 mt-1">
+                  <span>Pertanyaan {{ quizIndex + 1 }} dari {{ quizQuestions.length }}</span>
+                  <span>Bobot: 20 Poin / Soal</span>
+                </div>
+              </div>
+
+              <!-- Question Text -->
+              <p class="text-sm sm:text-base font-extrabold text-slate-900 mb-4">{{ currentQuizQuestion.q }}</p>
+
+              <!-- Option Buttons -->
+              <div class="space-y-2 mb-4">
+                <button 
+                  v-for="(opt, optIdx) in currentQuizQuestion.opts" 
+                  :key="optIdx"
+                  @click="selectQuizOption(optIdx)"
+                  :disabled="quizAnswerSubmitted"
+                  :class="[
+                    quizAnswerSubmitted && optIdx === currentQuizQuestion.correct ? 'bg-emerald-100 border-emerald-500 text-emerald-950 font-bold' : '',
+                    quizAnswerSubmitted && quizSelectedOption === optIdx && optIdx !== currentQuizQuestion.correct ? 'bg-red-100 border-red-500 text-red-950 font-bold' : '',
+                    !quizAnswerSubmitted ? 'bg-amber-50/40 hover:bg-amber-100/60 border-amber-200 text-slate-800' : ''
+                  ]"
+                  class="w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm font-medium transition flex items-center justify-between">
+                  <span>{{ String.fromCharCode(65 + optIdx) }}. {{ opt }}</span>
+                  <span v-if="quizAnswerSubmitted && optIdx === currentQuizQuestion.correct">✔️</span>
+                  <span v-if="quizAnswerSubmitted && quizSelectedOption === optIdx && optIdx !== currentQuizQuestion.correct">❌</span>
+                </button>
+              </div>
+
+              <!-- Explanation Box -->
+              <div v-if="quizAnswerSubmitted" class="p-4 rounded-xl border text-xs leading-relaxed mb-4" :class="quizSelectedOption === currentQuizQuestion.correct ? 'bg-emerald-50 border-emerald-300 text-emerald-950' : 'bg-red-50 border-red-300 text-red-950'">
+                <strong>{{ quizSelectedOption === currentQuizQuestion.correct ? '✅ Tepat Sekali!' : '❌ Jawaban Kurang Tepat!' }}</strong>
+                <p class="mt-1">{{ currentQuizQuestion.exp }}</p>
+                
+                <div class="text-right mt-3">
+                  <button 
+                    @click="nextQuizQuestion" 
+                    class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition">
+                    {{ quizIndex + 1 < quizQuestions.length ? 'Pertanyaan Berikutnya →' : 'Lihat Hasil Akhir →' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quiz Result View -->
+            <div v-else class="text-center py-6">
+              <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex flex-col items-center justify-center mx-auto mb-4 shadow-xl shadow-amber-500/20 font-black">
+                <span class="text-3xl leading-none">{{ quizScore }}</span>
+                <span class="text-[10px] font-bold opacity-80 uppercase">Skor</span>
+              </div>
+              <h4 class="text-xl font-black text-slate-900 mb-1">Hasil Evaluasi Kognitif</h4>
+              
+              <div :class="quizFeedback.colorClass" class="p-4 rounded-2xl border text-xs max-w-md mx-auto my-4 text-left">
+                <div class="font-extrabold text-sm mb-1">{{ quizFeedback.title }}</div>
+                <p>{{ quizFeedback.desc }}</p>
+              </div>
+
+              <div class="flex justify-center gap-3">
+                <button @click="restartQuiz" class="px-4 py-2 rounded-xl border border-amber-300 text-xs font-bold text-amber-900 hover:bg-amber-50 transition">
+                  Ulangi Kuis
+                </button>
+                <a href="#edukasi" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shadow hover:bg-amber-600 transition">
+                  Baca Ulang Materi
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PENJELASAN INOVASI PROGRAM KEBIDANAN
+         ========================================================================== -->
+    <section class="py-16 bg-gradient-to-b from-white to-amber-50/50 border-t border-amber-200/60" id="inovasi">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-200 text-amber-900 text-xs font-bold uppercase tracking-wider mb-2">Konsep &amp; Landasan Ilmiah</span>
+          <h3 class="text-3xl font-black text-slate-900 tracking-tight">Inovasi Program Kebidanan: Temansiklus</h3>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">Penjelasan arsitektur program dari segi tujuan, manfaat, cara kerja, sasaran pengguna, dan tata kelola evaluasi.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- 1. Tujuan -->
+          <div class="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-xl mb-4">🎯</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-3">1. Tujuan Inovasi</h4>
+            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+              <li>• Meningkatkan literasi kesehatan reproduksi remaja putri secara digital, bebas hambatan tabu, dan terpercaya.</li>
+              <li>• Membekali siswi sekolah dengan manajemen mandiri kram dismenorea untuk menekan absensi belajar.</li>
+              <li>• Deteksi dini tanda bahaya menstruasi (menorrhagia, amenorea) sebelum berkembang menjadi patologi.</li>
+            </ul>
+          </div>
+
+          <!-- 2. Manfaat -->
+          <div class="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-yellow-500/20 text-yellow-800 flex items-center justify-center font-bold text-xl mb-4">✨</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-3">2. Manfaat Inovasi</h4>
+            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+              <li>• <strong>Remaja Putri:</strong> Memahami tubuh sendiri, mengurangi kecemasan, dan mandiri merawat diri.</li>
+              <li>• <strong>Bidan / Faskes:</strong> Mendapatkan riwayat siklus (*anamnesis*) yang rapi dan akurat saat pasien berkonsultasi.</li>
+              <li>• <strong>Sekolah / UKS:</strong> Mendukung Trias UKS dan pengawasan kepatuhan minum Tablet Tambah Darah (TTD).</li>
+            </ul>
+          </div>
+
+          <!-- 3. Cara Kerja -->
+          <div class="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-amber-600/20 text-amber-800 flex items-center justify-center font-bold text-xl mb-4">⚙️</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-3">3. Cara Kerja Inovasi</h4>
+            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+              <li>• <strong>Eksplorasi Edukasi:</strong> Remaja membaca panduan pencegahan kram dan kebersihan diri.</li>
+              <li>• <strong>Input &amp; Tracking:</strong> Menghitung perkiraan siklus haid dan ovulasi pada kalender pintar.</li>
+              <li>• <strong>Triage Skrining:</strong> Menguji status keluhan haid (Hijau Aman, Kuning Pantau, Merah Rujukan).</li>
+            </ul>
+          </div>
+
+          <!-- 4. Sasaran Pengguna -->
+          <div class="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-yellow-400/20 text-yellow-800 flex items-center justify-center font-bold text-xl mb-4">👥</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-3">4. Sasaran Pengguna</h4>
+            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+              <li>• Remaja putri usia 10 - 19 tahun (jenjang SMP, SMA/SMK, hingga mahasiswi baru).</li>
+              <li>• Kader Posyandu Remaja &amp; konselor sebaya (*peer counselor*).</li>
+              <li>• Bidan Praktik Mandiri (BPM) dan penanggung jawab UKS di sekolah.</li>
+            </ul>
+          </div>
+
+          <!-- 5. Tata Cara Evaluasi Dampak (Span 2) -->
+          <div class="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm md:col-span-2">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">📊</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-3">5. Tata Cara Evaluasi Dampak Program (Google Form Support)</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-600 leading-relaxed">
+              <div>
+                <strong class="text-slate-800 block mb-1">Model Pre-Test &amp; Post-Test:</strong>
+                Google Form dimanfaatkan sebagai instrumen pengukur peningkatan nilai kognitif (*normalized gain score*) remaja putri sebelum dan sesudah mengakses materi website.
+              </div>
+              <div>
+                <strong class="text-slate-800 block mb-1">Integrasi Google Sheets:</strong>
+                Data respon kuis terekam secara otomatis di spreadsheet cloud, mempermudah guru UKS, bidan, atau peneliti dalam melakukan analisis statistik (Uji Paired T-Test / Wilcoxon).
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         MODAL: CUSTOMIZE GOOGLE FORM URL
+         ========================================================================== -->
+    <div v-show="showGformModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+      <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-amber-200 relative">
+        <button @click="closeGformModal" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        <h4 class="text-lg font-bold text-slate-900 mb-2">Atur Tautan Google Form Kustom</h4>
+        <p class="text-xs text-slate-500 mb-4">Masukkan URL Google Form milik Anda (misal untuk kuis penelitian skripsi, evaluasi UKS, atau tugas sekolah). Tautan akan tersimpan di browser.</p>
+
+        <div class="mb-4">
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">URL Google Form:</label>
+          <input 
+            v-model="customGformInput" 
+            type="url" 
+            placeholder="https://docs.google.com/forms/d/e/.../viewform" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-amber-200 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <p class="text-[11px] text-slate-400 mt-1">Harus diawali dengan https://docs.google.com/forms/...</p>
+        </div>
+
+        <button 
+          @click="saveCustomGformUrl" 
+          class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition">
+          Simpan &amp; Terapkan ke Website
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         TOAST NOTIFICATION (VUE REACTIVE)
+         ========================================================================== -->
+    <div 
+      v-show="toast.show" 
+      class="fixed bottom-6 right-6 z-50 bg-slate-900 text-amber-300 px-5 py-3 rounded-2xl text-xs font-bold shadow-xl border border-amber-500/30 transition-all flex items-center gap-2">
+      <span>✨</span>
+      <span>{{ toast.message }}</span>
+    </div>
+
+    <!-- ==========================================================================
+         FOOTER (YELLOW & SLATE PALETTE)
+         ========================================================================== -->
+    <footer class="bg-slate-950 text-white pt-14 pb-8 border-t border-amber-500/20 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+          <div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <div class="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-bold">
+                ☀️
+              </div>
+              <h4 class="text-lg font-bold text-white tracking-tight">Temansiklus</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+              Platform terintegrasi edukasi kebidanan, pemantauan siklus menstruasi, skrining mandiri, dan evaluasi kuis bagi remaja putri Indonesia menuju generasi sehat bebas anemia.
+            </p>
+          </div>
+
+          <div>
+            <h5 class="text-sm font-bold text-amber-400 mb-3 uppercase tracking-wider">Navigasi Fitur</h5>
+            <ul class="text-xs text-slate-400 space-y-2">
+              <li><a href="#edukasi" class="hover:text-amber-300 transition">Edukasi Keluhan Haid</a></li>
+              <li><a href="#kalender" class="hover:text-amber-300 transition">Kalender Haid &amp; Tracker</a></li>
+              <li><a href="#panduan" class="hover:text-amber-300 transition">Panduan &amp; Triage Medis</a></li>
+              <li><a href="#kuis" class="hover:text-amber-300 transition">Kuis Evaluasi Google Form</a></li>
+              <li><a href="#inovasi" class="hover:text-amber-300 transition">Inovasi Program Kebidanan</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 class="text-sm font-bold text-amber-400 mb-3 uppercase tracking-wider">Standar Ilmiah</h5>
+            <ul class="text-xs text-slate-400 space-y-2">
+              <li>Kementerian Kesehatan Republik Indonesia</li>
+              <li>Ikatan Bidan Indonesia (IBI)</li>
+              <li>Standar Fisiologis Reproduksi FIGO</li>
+              <li>Program Gerakan Aksi Bergizi (TTD)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+          <p>&copy; 2026 Temansiklus. Inovasi Media Edukasi Kesehatan Reproduksi Kebidanan.</p>
+          <p>Sahabat Cerdas Menstruasi Sehat &amp; Berenergi.</p>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Vue 3 App Logic -->
+  <script src="vue-app.js"></script>
+</body>
+</html>

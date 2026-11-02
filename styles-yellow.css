@@ -1,0 +1,142 @@
+/* ==========================================================================
+   SIKLUSSEHAT REMAJA - YELLOW/AMBER THEME STYLES & TAILWIND EXTENSIONS
+   Tema: Kebidanan Remaja, Hangat, Ceria, Optimis, Terpercaya (Kuning / Amber / Emas)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Yellow / Amber Theme Colors */
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+  --amber-900: #78350f;
+
+  --yellow-50: #fefce8;
+  --yellow-100: #fef9c3;
+  --yellow-200: #fef08a;
+  --yellow-300: #fde047;
+  --yellow-400: #facc15;
+  --yellow-500: #eab308;
+  --yellow-600: #ca8a04;
+
+  --bg-warm: #fffdf5;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-warm);
+  color: var(--text-dark);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar in Warm Amber */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fef9c3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d97706;
+}
+
+/* Animations */
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseWarm {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
+
+.animate-pulse-warm {
+  animation: pulseWarm 3s infinite ease-in-out;
+}
+
+/* Range input styling in Amber */
+input[type="range"] {
+  accent-color: #f59e0b;
+}
+
+/* Calendar Day Custom States (Yellow & Amber Palette) */
+.cal-day-period {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.35);
+}
+
+.cal-day-predicted {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1.5px dashed #f59e0b !important;
+  font-weight: 700;
+}
+
+.cal-day-fertile {
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+  font-weight: 600;
+}
+
+.cal-day-ovulation {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);
+}
+
+.cal-day-has-log::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: #d97706;
+}
+
+/* Print Stylesheet for Midwifery Cycle Report */
+@media print {
+  header, footer, nav, .no-print, #inovasi, #kuis, .flow-diagram-container {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .print-area {
+    display: block !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
