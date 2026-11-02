@@ -298,7 +298,7 @@ createApp({
 
     uniqueSchoolsCount() {
       const schools = new Set(this.allVisitors.map(v => (v.sekolah || '').trim().toLowerCase()).filter(Boolean));
-      return schools.size > 0 ? schools.size : 1;
+      return schools.size;
     }
   },
 
@@ -311,37 +311,37 @@ createApp({
   methods: {
     // Buku Tamu Identitas Pengunjung Methods
     checkVisitorIdentity() {
-      // 5 Pengunjung Awal Komunitas (Representasi berbagai sekolah & daerah)
-      const defaultCommunity = [
-        { id: 101, nama: 'Nabila Putri Maharani', usia: 15, sekolah: 'SMPN 1 Padang', kota: 'Padang', wa: '081267891234', waktu: 'Hari ini, 09:15' },
-        { id: 102, nama: 'Aisyah Rahmadani', usia: 16, sekolah: 'SMAN 2 Surabaya', kota: 'Surabaya', wa: '081398765432', waktu: 'Hari ini, 11:30' },
-        { id: 103, nama: 'Dewi Lestari Safitri', usia: 14, sekolah: 'SMPN 3 Bandung', kota: 'Bandung', wa: '085712345678', waktu: 'Hari ini, 13:45' },
-        { id: 104, nama: 'Siti Nurhaliza', usia: 17, sekolah: 'SMKN 1 Jakarta', kota: 'Jakarta', wa: '081987654321', waktu: 'Kemarin, 16:20' },
-        { id: 105, nama: 'Zahra Amelia Santoso', usia: 15, sekolah: 'SMAN 1 Yogyakarta', kota: 'Yogyakarta', wa: '082134567890', waktu: 'Kemarin, 19:10' }
-      ];
+      // 1. Selalu munculkan pop-up modal setiap kali website dibuka / link diklik
+      this.showVisitorModal = true;
 
+      // 2. Siapkan form identitas kosong agar setiap pengunjung baru bisa mengisi
+      this.visitor = {
+        nama: '',
+        usia: 15,
+        sekolah: '',
+        wa: '',
+        kota: '',
+        waktu: ''
+      };
+      this.isVisitorIdentified = false;
+
+      // 3. Bersihkan data dummy awal, reset ke 0 profil
       try {
-        const savedVisitor = localStorage.getItem('temansiklus_visitor');
-        if (savedVisitor) {
-          this.visitor = JSON.parse(savedVisitor);
-          this.isVisitorIdentified = true;
-          this.showVisitorModal = false;
-        } else {
-          this.isVisitorIdentified = false;
-          this.showVisitorModal = true;
-        }
-
         const savedAll = localStorage.getItem('temansiklus_all_visitors');
         if (savedAll) {
           const parsed = JSON.parse(savedAll);
-          this.allVisitors = Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultCommunity;
+          // Hapus profil dummy mock (ID 101 s/d 105) jika pernah tersimpan di browser
+          if (Array.isArray(parsed)) {
+            this.allVisitors = parsed.filter(v => v && (!v.id || v.id > 1000));
+            localStorage.setItem('temansiklus_all_visitors', JSON.stringify(this.allVisitors));
+          } else {
+            this.allVisitors = [];
+          }
         } else {
-          this.allVisitors = defaultCommunity;
-          localStorage.setItem('temansiklus_all_visitors', JSON.stringify(defaultCommunity));
+          this.allVisitors = [];
         }
       } catch (e) {
-        this.allVisitors = defaultCommunity;
-        this.showVisitorModal = true;
+        this.allVisitors = [];
       }
     },
 
@@ -419,6 +419,17 @@ createApp({
 
     closeAdminVisitors() {
       this.showAdminVisitorModal = false;
+    },
+
+    resetAllVisitors() {
+      if (confirm('Apakah Anda yakin ingin menghapus SEMUA riwayat profil dan me-reset daftar ke 0?')) {
+        this.allVisitors = [];
+        localStorage.removeItem('temansiklus_all_visitors');
+        localStorage.removeItem('temansiklus_visitor');
+        this.visitor = { nama: '', usia: 15, sekolah: '', wa: '', kota: '', waktu: '' };
+        this.isVisitorIdentified = false;
+        alert('Semua profil telah berhasil dihapus dan di-reset ke 0.');
+      }
     },
 
     formatWaChatUrl(phone) {

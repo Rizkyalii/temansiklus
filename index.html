@@ -1182,7 +1182,7 @@
           </div>
 
           <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm text-center">
-            <div class="text-3xl font-black text-amber-600 mb-1">{{ uniqueSchoolsCount }}+</div>
+            <div class="text-3xl font-black text-amber-600 mb-1">{{ uniqueSchoolsCount }}</div>
             <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Sekolah Terwakili</p>
           </div>
 
@@ -1214,7 +1214,7 @@
         </div>
 
         <!-- Visitor Cards Grid (Tampilan Identitas Pengunjung Terdata) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-if="allVisitors.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <div 
             v-for="(v, idx) in filteredVisitors" 
             :key="v.id || idx"
@@ -1270,8 +1270,24 @@
           </div>
         </div>
 
+        <!-- Empty state when allVisitors is 0 (Belum ada yang mengisi / baru di-reset) -->
+        <div v-if="allVisitors.length === 0" class="bg-white rounded-3xl p-10 sm:p-12 border-2 border-dashed border-amber-300 text-center max-w-lg mx-auto my-6 shadow-sm">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-3xl shadow-sm">
+            👥
+          </div>
+          <h4 class="text-base sm:text-lg font-black text-slate-900 mb-1">Daftar Pengunjung Masih Kosong (0)</h4>
+          <p class="text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">
+            Semua profil sebelumnya telah di-reset ke 0. Setiap kali seseorang mengklik link website ini dan mengisi identitasnya, namanya akan langsung otomatis muncul di sini!
+          </p>
+          <button 
+            @click="openEditVisitorModal" 
+            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition">
+            ✍️ Masukkan Identitas Pertama
+          </button>
+        </div>
+
         <!-- Empty state when search has no result -->
-        <div v-if="filteredVisitors.length === 0" class="bg-white rounded-3xl p-10 border border-amber-200 text-center max-w-md mx-auto my-6">
+        <div v-if="allVisitors.length > 0 && filteredVisitors.length === 0" class="bg-white rounded-3xl p-10 border border-amber-200 text-center max-w-md mx-auto my-6">
           <div class="text-4xl mb-3">🔍</div>
           <h5 class="text-sm font-bold text-slate-900 mb-1">Tidak Ditemukan</h5>
           <p class="text-xs text-slate-500 mb-4">Tidak ada nama atau sekolah yang cocok dengan "{{ searchVisitorQuery }}".</p>
@@ -1398,9 +1414,9 @@
         <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-200/50 rounded-full blur-2xl pointer-events-none"></div>
 
         <button 
-          v-if="isVisitorIdentified" 
           @click="showVisitorModal = false" 
-          class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-2xl font-bold transition">
+          class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-2xl font-bold transition p-1"
+          title="Tutup / Lewati">
           &times;
         </button>
 
@@ -1495,6 +1511,15 @@
             <span v-else>Masuk &amp; Mulai Jelajahi Temansiklus 🚀</span>
           </button>
 
+          <div class="text-center pt-1">
+            <button 
+              type="button" 
+              @click="showVisitorModal = false" 
+              class="text-xs text-slate-400 hover:text-amber-800 font-semibold underline transition">
+              Lewati &amp; Langsung Baca Materi Dulu
+            </button>
+          </div>
+
           <p class="text-[11px] text-slate-400 text-center mt-2">
             🔒 Identitas ini otomatis tercatat di dashboard pemilik website untuk pemantauan jangkauan edukasi kebidanan.
           </p>
@@ -1537,12 +1562,20 @@
           <span class="text-xs font-bold text-slate-700">
             Terdata di Browser Ini: <strong class="text-amber-800 font-extrabold text-sm">{{ allVisitors.length }} Orang</strong>
           </span>
-          <button 
-            @click="exportVisitorsCSV" 
-            class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Unduh Rekap (.CSV)</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button 
+              @click="resetAllVisitors" 
+              class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 hover:bg-rose-50 font-bold text-xs transition flex items-center gap-1"
+              title="Hapus semua data pengunjung di browser ini dan reset ke 0">
+              <span>🗑️ Reset ke 0</span>
+            </button>
+            <button 
+              @click="exportVisitorsCSV" 
+              class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Unduh Rekap (.CSV)</span>
+            </button>
+          </div>
         </div>
 
         <div class="flex-1 overflow-y-auto border border-amber-200 rounded-2xl bg-slate-50/50 mb-4">
