@@ -79,6 +79,23 @@ Dikelola secara reaktif menggunakan tab Vue 3 (`activeTab`):
 
 ---
 
+### 5. 🌸 Buku Tamu &amp; Pelacak Identitas Pengunjung (Visitor Tracking)
+Fitur khusus agar **pemilik website mengetahui siapa saja yang telah mengunjungi/mengklik website**:
+- **Alur Pengunjung:** Saat pertama kali membuka website, muncul modal sambutan ramah meminta input:
+  1. Nama Lengkap / Panggilan
+  2. Usia (Tahun)
+  3. Asal Sekolah / Instansi
+  4. Kota / Kabupaten Asal
+- **Logika &amp; Penyimpanan:**
+  - Data langsung disimpan di *LocalStorage* agar pengunjung yang kembali tidak perlu mengisi ulang.
+  - Sapaan nama personal ditampilkan di header &amp; banner: *"👋 Halo, Siti (SMAN 1)"*.
+  - Data otomatis dikirimkan ke **Netlify Forms** di cloud sehingga pemilik website menerima rekap pengunjung secara real-time.
+- **Panel Rekap Pemilik Website (Admin):**
+  - Pemilik website dapat melihat daftar pengunjung melalui tombol *"🔐 Rekap Pengunjung Pemilik"* di footer (kode akses: `admin`).
+  - Tersedia tombol **"Unduh Rekap (.CSV)"** untuk membuka daftar pengunjung di Microsoft Excel.
+
+---
+
 ## 💡 Penjelasan Inovasi Program Kebidanan
 
 | Komponen Inovasi | Penjelasan &amp; Landasan Ilmiah |

@@ -16,6 +16,20 @@ createApp({
       // Mobile Nav Drawer
       mobileMenuOpen: false,
 
+      // Buku Tamu Identitas Pengunjung (Tracking Pengunjung untuk Pemilik Website)
+      visitor: {
+        nama: '',
+        usia: '15',
+        sekolah: '',
+        kota: '',
+        waktu: ''
+      },
+      isVisitorIdentified: false,
+      showVisitorModal: false,
+      visitorSubmitting: false,
+      allVisitors: [],
+      showAdminVisitorModal: false,
+
       // Feature 1: Edukasi Tabs
       activeTab: 'dismenorea',
 
@@ -270,11 +284,125 @@ createApp({
   },
 
   mounted() {
+    this.checkVisitorIdentity();
     this.loadFromStorage();
     this.loadLogForSelectedDate();
   },
 
   methods: {
+    // Buku Tamu Identitas Pengunjung Methods
+    checkVisitorIdentity() {
+      try {
+        const savedVisitor = localStorage.getItem('temansiklus_visitor');
+        if (savedVisitor) {
+          this.visitor = JSON.parse(savedVisitor);
+          this.isVisitorIdentified = true;
+          this.showVisitorModal = false;
+        } else {
+          this.isVisitorIdentified = false;
+          this.showVisitorModal = true;
+        }
+        const savedAll = localStorage.getItem('temansiklus_all_visitors');
+        if (savedAll) {
+          this.allVisitors = JSON.parse(savedAll);
+        }
+      } catch (e) {
+        this.showVisitorModal = true;
+      }
+    },
+
+    submitVisitorIdentity() {
+      if (!this.visitor.nama || !this.visitor.nama.trim()) {
+        alert('Mohon masukkan nama lengkap Anda.');
+        return;
+      }
+      if (!this.visitor.usia) {
+        alert('Mohon pilih usia Anda.');
+        return;
+      }
+      if (!this.visitor.sekolah || !this.visitor.sekolah.trim()) {
+        alert('Mohon masukkan asal sekolah atau instansi Anda.');
+        return;
+      }
+
+      this.visitorSubmitting = true;
+      const nowStr = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+      this.visitor.waktu = nowStr;
+
+      // 1. Simpan identitas pengunjung saat ini di LocalStorage
+      localStorage.setItem('temansiklus_visitor', JSON.stringify(this.visitor));
+      this.isVisitorIdentified = true;
+
+      // 2. Tambahkan ke Rekap Daftar Pengunjung di browser
+      const record = { ...this.visitor, id: Date.now() };
+      this.allVisitors.unshift(record);
+      localStorage.setItem('temansiklus_all_visitors', JSON.stringify(this.allVisitors));
+
+      // 3. Kirim ke Netlify Forms secara asinkron (agar pemilik website menerima di dashboard & email)
+      const formData = new URLSearchParams();
+      formData.append('form-name', 'buku-tamu-pengunjung');
+      formData.append('nama', this.visitor.nama);
+      formData.append('usia', this.visitor.usia);
+      formData.append('sekolah', this.visitor.sekolah);
+      formData.append('kota', this.visitor.kota || '-');
+      formData.append('waktu_kunjungan', nowStr);
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString()
+      })
+      .then(() => {
+        console.log('Data pengunjung berhasil dikirim ke Netlify Forms');
+      })
+      .catch((err) => {
+        console.log('Catatan lokal tersimpan (offline/local mode):', err);
+      })
+      .finally(() => {
+        this.visitorSubmitting = false;
+        this.showVisitorModal = false;
+        this.showNotification(`Halo ${this.visitor.nama}, selamat datang di Temansiklus! 🌸`);
+      });
+    },
+
+    openEditVisitorModal() {
+      this.showVisitorModal = true;
+    },
+
+    openAdminVisitors() {
+      const pass = prompt('Masukkan Kode Akses Pemilik Website / Admin (Default: admin):');
+      if (pass === 'admin' || pass === 'bidan' || pass === 'temansiklus') {
+        this.showAdminVisitorModal = true;
+      } else if (pass !== null) {
+        alert('Kode akses salah. Gunakan kode: admin');
+      }
+    },
+
+    closeAdminVisitors() {
+      this.showAdminVisitorModal = false;
+    },
+
+    exportVisitorsCSV() {
+      if (!this.allVisitors || this.allVisitors.length === 0) {
+        alert('Belum ada data pengunjung yang tercatat.');
+        return;
+      }
+      let csv = 'Nama Lengkap,Usia,Asal Sekolah / Instansi,Kota / Kabupaten,Waktu Kunjungan\n';
+      this.allVisitors.forEach(v => {
+        const cleanName = (v.nama || '').replace(/"/g, '""');
+        const cleanSchool = (v.sekolah || '').replace(/"/g, '""');
+        const cleanCity = (v.kota || '-').replace(/"/g, '""');
+        csv += `"${cleanName}","${v.usia}","${cleanSchool}","${cleanCity}","${v.waktu}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rekap_pengunjung_temansiklus_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+
     // Storage Handlers
     loadFromStorage() {
       try {
