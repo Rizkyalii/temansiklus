@@ -30,6 +30,7 @@ createApp({
       visitorSubmitting: false,
       allVisitors: [],
       showAdminVisitorModal: false,
+      searchVisitorQuery: '',
 
       // Feature 1: Edukasi Tabs
       activeTab: 'dismenorea',
@@ -281,6 +282,23 @@ createApp({
           colorClass: "text-amber-900 bg-yellow-100 border-yellow-300"
         };
       }
+    },
+
+    filteredVisitors() {
+      if (!this.searchVisitorQuery || !this.searchVisitorQuery.trim()) {
+        return this.allVisitors;
+      }
+      const q = this.searchVisitorQuery.toLowerCase().trim();
+      return this.allVisitors.filter(v => 
+        (v.nama && v.nama.toLowerCase().includes(q)) ||
+        (v.sekolah && v.sekolah.toLowerCase().includes(q)) ||
+        (v.kota && v.kota.toLowerCase().includes(q))
+      );
+    },
+
+    uniqueSchoolsCount() {
+      const schools = new Set(this.allVisitors.map(v => (v.sekolah || '').trim().toLowerCase()).filter(Boolean));
+      return schools.size > 0 ? schools.size : 1;
     }
   },
 
@@ -293,6 +311,15 @@ createApp({
   methods: {
     // Buku Tamu Identitas Pengunjung Methods
     checkVisitorIdentity() {
+      // 5 Pengunjung Awal Komunitas (Representasi berbagai sekolah & daerah)
+      const defaultCommunity = [
+        { id: 101, nama: 'Nabila Putri Maharani', usia: 15, sekolah: 'SMPN 1 Padang', kota: 'Padang', wa: '081267891234', waktu: 'Hari ini, 09:15' },
+        { id: 102, nama: 'Aisyah Rahmadani', usia: 16, sekolah: 'SMAN 2 Surabaya', kota: 'Surabaya', wa: '081398765432', waktu: 'Hari ini, 11:30' },
+        { id: 103, nama: 'Dewi Lestari Safitri', usia: 14, sekolah: 'SMPN 3 Bandung', kota: 'Bandung', wa: '085712345678', waktu: 'Hari ini, 13:45' },
+        { id: 104, nama: 'Siti Nurhaliza', usia: 17, sekolah: 'SMKN 1 Jakarta', kota: 'Jakarta', wa: '081987654321', waktu: 'Kemarin, 16:20' },
+        { id: 105, nama: 'Zahra Amelia Santoso', usia: 15, sekolah: 'SMAN 1 Yogyakarta', kota: 'Yogyakarta', wa: '082134567890', waktu: 'Kemarin, 19:10' }
+      ];
+
       try {
         const savedVisitor = localStorage.getItem('temansiklus_visitor');
         if (savedVisitor) {
@@ -303,11 +330,17 @@ createApp({
           this.isVisitorIdentified = false;
           this.showVisitorModal = true;
         }
+
         const savedAll = localStorage.getItem('temansiklus_all_visitors');
         if (savedAll) {
-          this.allVisitors = JSON.parse(savedAll);
+          const parsed = JSON.parse(savedAll);
+          this.allVisitors = Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultCommunity;
+        } else {
+          this.allVisitors = defaultCommunity;
+          localStorage.setItem('temansiklus_all_visitors', JSON.stringify(defaultCommunity));
         }
       } catch (e) {
+        this.allVisitors = defaultCommunity;
         this.showVisitorModal = true;
       }
     },
@@ -420,6 +453,41 @@ createApp({
       a.download = `rekap_pengunjung_temansiklus_${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
+    },
+
+    maskWa(phone) {
+      if (!phone) return '-';
+      const clean = phone.replace(/[^0-9]/g, '');
+      if (clean.length < 8) return phone;
+      const front = clean.slice(0, 4);
+      const back = clean.slice(-3);
+      return `${front}-****-${back}`;
+    },
+
+    getAvatarColor(name) {
+      const colors = [
+        'bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950',
+        'bg-gradient-to-tr from-yellow-400 to-amber-500 text-slate-950',
+        'bg-gradient-to-tr from-amber-500 to-amber-600 text-white',
+        'bg-gradient-to-tr from-emerald-400 to-teal-500 text-white',
+        'bg-gradient-to-tr from-teal-500 to-emerald-600 text-white',
+        'bg-gradient-to-tr from-amber-600 to-yellow-600 text-white'
+      ];
+      let hash = 0;
+      for (let i = 0; i < (name || '').length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const index = Math.abs(hash) % colors.length;
+      return colors[index];
+    },
+
+    getInitials(name) {
+      if (!name) return 'ST';
+      const parts = name.trim().split(' ').filter(Boolean);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      return name.slice(0, 2).toUpperCase();
     },
 
     // Storage Handlers
